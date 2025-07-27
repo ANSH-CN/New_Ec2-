@@ -24,7 +24,7 @@ jobs:
 
       - name: Login to Docker Hub
         run: |
-         docker login -u "cloudansh" -p "${{ secrets.DOCKER_PASSWORD }}"
+         docker login -u "cloudansh" -p "Cloudnexus@1234"
 
 
       - name: Push image to Docker Hub
