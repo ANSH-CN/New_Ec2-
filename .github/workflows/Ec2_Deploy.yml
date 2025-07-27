@@ -35,7 +35,7 @@ jobs:
 
   deploy:
     needs: build
-    runs-on: self-hosted  # ✅ This should be your EC2 self-hosted runner
+    runs-on: ubuntu-latest # ✅ This should be your EC2 self-hosted runner
 
     steps:
       - name: 🐳 Docker Login on EC2
