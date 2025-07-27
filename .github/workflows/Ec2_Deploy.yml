@@ -26,7 +26,7 @@ jobs:
         run: npm run build --prod
 
       - name: 🐳 Login to Docker Hub
-        run: echo "Cloudnexus@1234" | docker login -u "cloudansh" --password-stdin
+        run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
 
       - name: 🐳 Build Docker Image
         run: |
@@ -40,11 +40,11 @@ jobs:
 
   deploy:
     needs: build
-    runs-on: self-hosted  # ✅ This should be your EC2 runner
+    runs-on: self-hosted  # ✅ EC2 runner must be configured with Docker
 
     steps:
       - name: 🐳 Docker Login on EC2
-        run: echo "Cloudnexus@1234" | docker login -u "cloudansh" --password-stdin
+        run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
 
       - name: 📥 Pull Image from Docker Hub
         run: docker pull cloudansh/fms-system:latest
@@ -53,4 +53,4 @@ jobs:
         run: docker rm -f fms-system-container || true
 
       - name: 🚀 Run New Container
-        run: docker run -d -p 3000:80 --name fms-system-container cloudansh/fms-system:latest
+        run: docker run -d -p 80:80 --name fms-system-container cloudansh/fms-system:latest
