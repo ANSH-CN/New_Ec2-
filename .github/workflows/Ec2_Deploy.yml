@@ -7,7 +7,7 @@ on:
 
 jobs:
   build-and-deploy:
-    runs-on: [self-hosted, linux]  # Your EC2 GitHub Runner labels
+    runs-on: ubuntu-latest # Your EC2 GitHub Runner labels
 
     steps:
       - name: Checkout code
@@ -36,4 +36,4 @@ jobs:
           docker pull cloudansh/dummy-server:latest
           docker stop dummy-server || true
           docker rm dummy-server || true
-          docker run -d --name dummy-server -p 80:80 cloudansh/dummy-server:latest
+          docker run -d --name dummy-server -p 8080:80 cloudansh/dummy-server:latest
