@@ -42,7 +42,7 @@ jobs:
 
   deploy:
     needs: build
-    runs-on: [self-hosted, linux]  # EC2 self-hosted runner tag
+    runs-on: ubuntu-latest  # EC2 self-hosted runner tag
 
     steps:
       - name: 🐳 Docker Login on EC2
