@@ -27,7 +27,7 @@ jobs:
         run: npm run build --prod
 
       - name: 🐳 Login to Docker Hub
-        run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "cloudansh" --password-stdin
+        run: echo "Cloudnexus@1234" | docker login -u "cloudansh" --password-stdin
 
       - name: 🐳 Build Docker Image
         run: |
