@@ -36,8 +36,8 @@ jobs:
       - name: 🔐 Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-access-key-id: "AKIAU6VTTDLXODBMES6M"
+          aws-secret-access-key: "Aum4/RLmzr9d8UU8SHBSYV6l7zO0hxV1yONIXE3Z"
           aws-region: ap-south-1  # Change this if your region is different
 
   deploy:
