@@ -7,7 +7,7 @@ on:
 
 jobs:
   build-and-deploy:
-    runs-on: [self-hosted, linux]  # Make sure your EC2 GitHub runner is labeled this way
+    runs-on: [self-hosted, linux]  # Your EC2 GitHub Runner labels
 
     steps:
       - name: Checkout code
@@ -20,19 +20,19 @@ jobs:
 
       - name: Build Docker image
         run: |
-          docker build -t ${{ secrets.DOCKER_USERNAME }}/dummy-server:latest .
+          docker build -t cloudansh/dummy-server:latest .
 
       - name: Login to Docker Hub
         run: |
-          echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
+          echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "cloudansh" --password-stdin
 
       - name: Push image to Docker Hub
         run: |
-          docker push ${{ secrets.DOCKER_USERNAME }}/dummy-server:latest
+          docker push cloudansh/dummy-server:latest
 
       - name: Pull and redeploy container
         run: |
-          docker pull ${{ secrets.DOCKER_USERNAME }}/dummy-server:latest
+          docker pull cloudansh/dummy-server:latest
           docker stop dummy-server || true
           docker rm dummy-server || true
-          docker run -d --name dummy-server -p 80:80 ${{ secrets.DOCKER_USERNAME }}/dummy-server:latest
+          docker run -d --name dummy-server -p 80:80 cloudansh/dummy-server:latest
