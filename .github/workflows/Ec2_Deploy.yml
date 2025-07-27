@@ -24,7 +24,7 @@ jobs:
 
       - name: Login to Docker Hub
         run: |
-          echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "cloudansh" --password-stdin
+          echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "cloudansh" 
 
       - name: Push image to Docker Hub
         run: |
