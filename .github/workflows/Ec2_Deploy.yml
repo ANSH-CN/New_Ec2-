@@ -19,9 +19,8 @@ jobs:
           node-version: '18'
 
       - name: 📦 Install Dependencies
-        run: npm install
-             npm install --legacy-peer-deps
-
+        run: |
+          npm install --legacy-peer-deps
 
       - name: 🏗️ Build Angular Project
         run: npm run build --prod
@@ -41,11 +40,14 @@ jobs:
 
   deploy:
     needs: build
-    runs-on: ubuntu-latest  # 👈 This must be your EC2 runner
+    runs-on: self-hosted  # ✅ This should be your EC2 runner
 
     steps:
+      - name: 🐳 Docker Login on EC2
+        run: echo "Cloudnexus@1234" | docker login -u "cloudansh" --password-stdin
+
       - name: 📥 Pull Image from Docker Hub
-        run: docker pull cloudnexus/fms-system:latest
+        run: docker pull cloudansh/fms-system:latest
 
       - name: 🗑️ Remove Old Container
         run: docker rm -f fms-system-container || true
