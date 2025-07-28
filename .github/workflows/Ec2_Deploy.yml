@@ -24,22 +24,32 @@ jobs:
       - name: 🏗️ Build Angular Project
         run: npm run build
 
-      - name: 🐳 Login to Docker Hub 
+      - name: 🐳 Login to Docker Hub
+        env:
+          DOCKER_PASSWORD: "Cloudnexus@1234"
         run: echo "Cloudnexus@1234" | docker login -u "cloudansh" --password-stdin
 
       - name: 🐳 Build Docker Image
-        run: docker build -t cloudansh/fms-system:latest .
+        run: docker build -t cloudansh/system:latest .
 
-      - name:  Push Docker Image to Docker Hub
-        run: docker push cloudansh/fms-system:latest
-      - name: 🐳 Docker Login on EC2
+      - name: 🚀 Push Docker Image to Docker Hub
+        run: docker push cloudansh/system:latest
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 🐳 Docker Login (Optional, only if your EC2 needs auth)
+        env:
+          DOCKER_PASSWORD: "Cloudnexus@1234"
         run: echo "Cloudnexus@1234" | docker login -u "cloudansh" --password-stdin
 
-      - name:  Pull Image from Docker Hub
-        run: docker pull cloudansh/fms-system:latest
+      - name: 📥 Pull Image from Docker Hub
+        run: docker pull cloudansh/system:latest
 
       - name: 🗑️ Remove Old Container if exists
-        run: docker rm -f fms-system-container || true
+        run: docker rm -f fmssystem-container || true
 
       - name: 🚀 Run New Container
-        run: docker run -d -p 3000:80 --name fms-system-container cloudansh/fms-system:latest
+        run: docker run -d -p 3000:80 --name system-container cloudansh/fms-system:latest
