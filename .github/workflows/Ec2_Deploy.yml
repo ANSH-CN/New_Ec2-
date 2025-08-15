@@ -1,0 +1,55 @@
+name: Deploy FMS Angular Application to AWS EC2
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 🧾 Checkout Source Code
+        uses: actions/checkout@v4
+
+      - name: ⚙️ Setup Node.js & Angular CLI
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+
+      - name: 📦 Install Dependencies
+        run: npm install --legacy-peer-deps
+
+      - name: 🏗️ Build Angular Project
+        run: npm run build
+
+      - name: 🐳 Login to Docker Hub
+        env:
+          DOCKER_PASSWORD: "Cloudnexus@1234"
+        run: echo "Cloudnexus@1234" | docker login -u "cloudansh" --password-stdin
+
+      - name: 🐳 Build Docker Image
+        run: docker build -t cloudansh/system:latest .
+
+      - name: 🚀 Push Docker Image to Docker Hub
+        run: docker push cloudansh/system:latest
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 🐳 Docker Login (Optional, only if your EC2 needs auth)
+        env:
+          DOCKER_PASSWORD: "Cloudnexus@1234"
+        run: echo "Cloudnexus@1234" | docker login -u "cloudansh" --password-stdin
+
+      - name: 📥 Pull Image from Docker Hub
+        run: docker pull cloudansh/system:latest
+
+      - name: 🗑️ Remove Old Container if exists
+        run: docker rm -f fmssystem-container || true
+
+      - name: 🚀 Run New Container
+        run: docker run -d -p 3000:80 --name system-container cloudansh/fms-system:latest
